@@ -16,8 +16,54 @@ _global_script_class_icons={
 [application]
 
 config/name="Gmtk 2020"
-run/main_scene="res://scenes/Player.tscn"
-config/icon="res://icon.png"
+run/main_scene="res://scenes/Main.tscn"
+
+[display]
+
+window/size/resizable=false
+
+[input]
+
+ui_focus_next={
+"deadzone": 0.57,
+"events": [  ]
+}
+ui_focus_prev={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_left={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_right={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_up={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_down={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_page_up={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_page_down={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_home={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_end={
+"deadzone": 0.5,
+"events": [  ]
+}
 
 [rendering]
 

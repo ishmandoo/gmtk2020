@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/4_banjo_session.ogg-ab33bb40e603c7cc018c53d2d822c9e0.oggstr"
+
+[deps]
+
+source_file="res://sound/4_banjo_session.ogg"
+dest_files=[ "res://.import/4_banjo_session.ogg-ab33bb40e603c7cc018c53d2d822c9e0.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

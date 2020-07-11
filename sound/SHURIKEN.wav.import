@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/SHURIKEN.wav-8f24e821d9b40593e0787c7b8fab5832.sample"
+
+[deps]
+
+source_file="res://sound/SHURIKEN.wav"
+dest_files=[ "res://.import/SHURIKEN.wav-8f24e821d9b40593e0787c7b8fab5832.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
