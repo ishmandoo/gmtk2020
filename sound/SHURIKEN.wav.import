@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/SHURIKEN.wav-8f24e821d9b40593e0787c7b8fab5832.sample"
+path="res://.import/shuriken.wav-def626ed2809255ca3a6a1b9c036b8cf.sample"
 
 [deps]
 
-source_file="res://sound/SHURIKEN.wav"
-dest_files=[ "res://.import/SHURIKEN.wav-8f24e821d9b40593e0787c7b8fab5832.sample" ]
+source_file="res://sound/shuriken.wav"
+dest_files=[ "res://.import/shuriken.wav-def626ed2809255ca3a6a1b9c036b8cf.sample" ]
 
 [params]
 

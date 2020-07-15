@@ -10,8 +10,8 @@
 [ext_resource path="res://sprites/CHERRY BOMB EXPLODE.png" type="Texture" id=8]
 [ext_resource path="res://sprites/SHURIKEN.png" type="Texture" id=9]
 [ext_resource path="res://sound/splat_1.wav" type="AudioStream" id=10]
-[ext_resource path="res://sound/SHURIKEN.wav" type="AudioStream" id=11]
-[ext_resource path="res://sound/explosion.wav" type="AudioStream" id=12]
+[ext_resource path="res://sound/shuriken.wav" type="AudioStream" id=11]
+[ext_resource path="res://sound/bomb.wav" type="AudioStream" id=12]
 
 [sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 5 )

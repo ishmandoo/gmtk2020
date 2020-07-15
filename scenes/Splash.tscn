@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://sprites/dog_splash.png" type="Texture" id=1]
+[ext_resource path="res://scripts/Splash.gd" type="Script" id=2]
+[ext_resource path="res://scripts/Scroll.gd" type="Script" id=3]
+[ext_resource path="res://sprites/text.png" type="Texture" id=4]
+[ext_resource path="res://sound/wilin_open.wav" type="AudioStream" id=5]
+[ext_resource path="res://interfaces/JMH Cthulhumbus Arcade.otf" type="DynamicFontData" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 30
+font_data = ExtResource( 6 )
+
+[node name="Splash" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="dog_splash" type="Sprite" parent="."]
+position = Vector2( 512, 300 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 1 )
+
+[node name="ScrollNode" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="Scroll" type="TextureRect" parent="ScrollNode"]
+visible = false
+margin_left = 1030.51
+margin_top = 485.059
+margin_right = 10893.5
+margin_bottom = 549.059
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollNode"]
+margin_left = 1047.67
+margin_top = 493.941
+margin_right = 12022.7
+margin_bottom = 593.941
+custom_fonts/normal_font = SubResource( 1 )
+custom_colors/default_color = Color( 0.133333, 0.12549, 0.203922, 1 )
+text = "Everyone knows that monkeys hate dogs. We don't know what this critter did to vex them, but he's on the run! These monkeys are huckin' all sorts of things: fruits, cherry bombs, and shurikens! Try to dodge everything but fruit. Getting hit by non-fruit hurts you. Catching fruits heals you, but riles you up! And when you get riled up, you get OUT OF CONTROL! But there's trouble: when you get out of control, the up, down, left, right keys (starting at WASD) move around! And, the more out of control you are, the more often they move! You can always see which the current keys are on the keyboard in the bottom right. And remember: watch out, because this dog WILIN'!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WilinSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )

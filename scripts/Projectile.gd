@@ -7,9 +7,10 @@ onready var splat = $SplatSound
 onready var stab = $StabSound
 onready var bomb = $BombSound
 
+onready var enabled = true
 
 onready var rotational_speed = 10.0
-onready var speed = 500.0
+onready var speed = rand_range(400,800)
 onready var throw_direction = Vector2()
 
 const Type = {
@@ -73,30 +74,37 @@ func stick():
 	#player.add_child(self)
 
 func hit_player(body):
-	if not body.is_in_group("player"):
-		die()
+	if not enabled:
 		return
+	enabled = false
+	var wilin_change = 0
+	var health_change = 0
 	if type == Type.APPLE:
-		change_player_wilin_health(1,10)
+		wilin_change = 1
+		health_change = 10
 		splat.play()
 		hit()
 	if type == Type.WATERMELON:
-		change_player_wilin_health(2,15)
+		wilin_change = 1
+		health_change = 15
 		splat.play()
 		hit()
 	if type == Type.BANANA:
-		change_player_wilin_health(0,5)
+		wilin_change = 1
+		health_change = 5
 		splat.play()
 		hit()
 	if type == Type.SHURIKEN:
-		change_player_wilin_health(0,-10)
+		health_change = -10
 		stab.play()
 		stick()
 	if type == Type.BOMB:
-		change_player_wilin_health(0,-20)
+		health_change = -20
 		bomb.play()
 		hit()
-	
+	if body.is_in_group("player"):
+		change_player_wilin_health(wilin_change,health_change)
+		
 func die():
 	queue_free()
 		

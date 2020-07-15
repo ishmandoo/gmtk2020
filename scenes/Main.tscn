@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://sprites/grass.png" type="Texture" id=2]
@@ -13,8 +13,9 @@
 [ext_resource path="res://sound/wilin.wav" type="AudioStream" id=11]
 [ext_resource path="res://sound/8_drum_noises_session.ogg" type="AudioStream" id=12]
 [ext_resource path="res://sound/5_bottle_session.ogg" type="AudioStream" id=13]
-[ext_resource path="res://sound/7_screams_session.ogg" type="AudioStream" id=14]
-[ext_resource path="res://sound/6_car_screech_session.ogg" type="AudioStream" id=15]
+[ext_resource path="res://sound/6_car_screech_session_quiet.ogg" type="AudioStream" id=14]
+[ext_resource path="res://sound/7_screams_session_quiet.ogg" type="AudioStream" id=15]
+[ext_resource path="res://sound/off_grid.wav" type="AudioStream" id=16]
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -180,10 +181,10 @@ stream = ExtResource( 9 )
 stream = ExtResource( 13 )
 
 [node name="MusicLayer6" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 15 )
+stream = ExtResource( 14 )
 
 [node name="MusicLayer7" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 14 )
+stream = ExtResource( 15 )
 
 [node name="MusicLayer8" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 12 )
@@ -200,3 +201,6 @@ current = true
 
 [node name="WilinSound" type="AudioStreamPlayer" parent="Player"]
 stream = ExtResource( 11 )
+
+[node name="OffGridSound" type="AudioStreamPlayer" parent="Player"]
+stream = ExtResource( 16 )

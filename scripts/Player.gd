@@ -2,7 +2,9 @@ extends KinematicBody2D
 
 onready var sprite = $PlayerSprite
 onready var wilin_sound = $WilinSound
+onready var off_grid_sound = $OffGridSound
 onready var gui = get_node("/root/Main/CanvasLayer/GUI")
+onready var grid = get_node("/root/Main/TileMap")
 
 
 export (float) var base_speed = 200.0
@@ -11,11 +13,12 @@ onready var speed = base_speed
 var velocity = Vector2()
 
 var map = [
-	[KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0],
-	[KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P],
-	[KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KEY_K, KEY_L, KEY_SEMICOLON],
-	[KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_QUESTION]
+	KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0,
+	KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P,
+	KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KEY_K, KEY_L, KEY_SEMICOLON,
+	KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_SLASH
 	]
+
 	
 enum WilinLevels {CALM, BOUNCY, RILED, BONKERS, BUCK_WILD, WILIN}
 
@@ -23,95 +26,90 @@ enum WilinLevels {CALM, BOUNCY, RILED, BONKERS, BUCK_WILD, WILIN}
 onready var health = 100
 onready var wilin_level = WilinLevels.CALM
 
-var HEIGHT = len(map)
-var WIDTH = len(map[0])
-var ORIGIN_MAX_Y = WIDTH-3
-var ORIGIN_MAX_X = HEIGHT-2
+var up = 11
+var down = 21
+var left = 20
+var right = 22
 
-var origin = Vector2(1, 0)
-var up = Vector2(1, 1)
-var down = Vector2(2, 1)
-var left =  Vector2(2, 0)
-var right =  Vector2(2, 2)
+const SCRAMBLE_TIME = 100
+const SCRAMBLE_SPEED = {
+	WilinLevels.CALM: 0,
+	WilinLevels.BOUNCY: 5,
+	WilinLevels.RILED: 7,
+	WilinLevels.BONKERS: 9,
+	WilinLevels.BUCK_WILD: 11,
+	WilinLevels.WILIN: 13,
+}
+onready var scramble_timer = SCRAMBLE_TIME
 
-var KEY_MOVE_OPTIONS = [
-	Vector2.UP,
-	Vector2.DOWN,
-	Vector2.LEFT,
-	Vector2.RIGHT
-]
 
-const SCRAMBLE_TIME = 5.0
-onready var timer = SCRAMBLE_TIME
+const CALM_DOWN_TIME = 10
+onready var calm_down_timer = CALM_DOWN_TIME
 
-func get_key(coords):
+onready var off_grid = false
+
+func get_input_event_key(index):
 	var new_input = InputEventKey.new()
-	new_input.set_scancode(map[int(coords.x)][int(coords.y)])
+	new_input.set_scancode(map[index])
 	return new_input
 	
+func reset_scramble_timer():
+	scramble_timer = SCRAMBLE_TIME
+	
+func reset_calm_down_timer():
+	calm_down_timer = CALM_DOWN_TIME
 
 func _ready():
 	update_keys()
+	reset_scramble_timer()
 	add_to_group("player")
+	reset_key("ui_up")
+	reset_key("ui_down")
+	reset_key("ui_left")
+	reset_key("ui_right")
+
 	
 func _process(delta):
-	print(up, down, left, right)
-	timer -= delta
-	if timer < 0:
+	scramble_timer -= delta * SCRAMBLE_SPEED[wilin_level]
+	calm_down_timer -= delta
+	if scramble_timer < 0:
 		scramble()
 		reset_scramble_timer()
+	if calm_down_timer < 0:
+		change_wilin(-1)
 	sprite.speed_scale = float(wilin_level + 1)
 	speed = base_speed + .25 * base_speed * float(wilin_level + 1)
 	
 	if health <= 0:
 		get_tree().reload_current_scene()
 		
-	
-func is_valid_origin(vec):
-	return (vec.x >= 0) and (vec.x <= ORIGIN_MAX_X) and (vec.y >= 0) and (vec.y <= ORIGIN_MAX_Y)
-	
-func reset_scramble_timer():
-	timer = SCRAMBLE_TIME
-	
-func random_translate():
-	var choice = KEY_MOVE_OPTIONS[randi() % KEY_MOVE_OPTIONS.size()]
-	var new_origin_candidate = origin + choice
-	if is_valid_origin(new_origin_candidate):
-		translate(choice)
-	else:
-		random_translate()
+	if not off_grid and (
+		(abs(position.x) > (grid.grid_size * grid.cell_size.x * grid.scale.x) or 
+		abs(position.y) > (grid.grid_size * grid.cell_size.y * grid.scale.y))):
+		off_grid_sound.play()
+		off_grid = true
 		
 func scramble():
 	var index_to_change = randi()%4
 	if (index_to_change == 0):
 		up = get_random_key()
+		reset_key("ui_up")
 	if (index_to_change == 1):
 		down = get_random_key()
+		reset_key("ui_down")
 	if (index_to_change == 2):
 		left = get_random_key()
+		reset_key("ui_left")
 	if (index_to_change == 3):
 		right = get_random_key()
+		reset_key("ui_right")
 	update_keys()
 		
 func get_random_key():
-	var x = randi()%map.size()
-	var y = randi()%map[0].size()
-	var key_coords = Vector2(x,y)
-	if not (
-		(key_coords == up) or 
-		(key_coords == down) or 
-		(key_coords == left) or 
-		(key_coords == right)):
-		return key_coords
+	var index = randi()%map.size()
+	if not index in [up, down, left, right]:
+		return index
 	return get_random_key()
-	
-func translate(vec):
-	origin += vec
-	up += vec
-	down += vec
-	left += vec
-	right += vec
-	update_keys()
 	
 func change_health(health_change):
 	health = clamp(health+health_change, 0, 100)
@@ -120,21 +118,26 @@ func change_wilin(wilin_change):
 	wilin_level = clamp(wilin_level+wilin_change, 0, len(WilinLevels) - 1)
 	if wilin_level == WilinLevels.WILIN:
 		wilin_sound.play()
+	reset_calm_down_timer()
+
+		
+func reset_key(action):
+	Input.action_release(action)
 	
 func update_keys():
 	InputMap.action_erase_events("ui_up")
 	InputMap.action_erase_events("ui_down")
 	InputMap.action_erase_events("ui_left")
 	InputMap.action_erase_events("ui_right")
-	InputMap.action_add_event("ui_up", get_key(up))
-	InputMap.action_add_event("ui_down", get_key(down))
-	InputMap.action_add_event("ui_left", get_key(left))
-	InputMap.action_add_event("ui_right", get_key(right))
+	InputMap.action_add_event("ui_up", get_input_event_key(up))
+	InputMap.action_add_event("ui_down", get_input_event_key(down))
+	InputMap.action_add_event("ui_left", get_input_event_key(left))
+	InputMap.action_add_event("ui_right", get_input_event_key(right))
 	gui.reset_keys()
-	for key in [up, down, left, right]:
-		gui.set_key(get_key(key).scancode)
-	for x in InputMap.get_actions():
-		Input.action_release(x)
+	gui.set_key("Up", get_input_event_key(up).scancode)
+	gui.set_key("Down", get_input_event_key(down).scancode)
+	gui.set_key("Left", get_input_event_key(left).scancode)
+	gui.set_key("Right", get_input_event_key(right).scancode)
 				
 func get_input():
 	velocity = Vector2()

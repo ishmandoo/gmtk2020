@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/7_screams_session_quiet.ogg-306a9b795e2bc3ac8eabaf702f2a4753.oggstr"
+
+[deps]
+
+source_file="res://sound/7_screams_session_quiet.ogg"
+dest_files=[ "res://.import/7_screams_session_quiet.ogg-306a9b795e2bc3ac8eabaf702f2a4753.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
